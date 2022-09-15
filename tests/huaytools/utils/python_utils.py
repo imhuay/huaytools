@@ -20,7 +20,6 @@ class TestPythonUtils(unittest.TestCase):
     """"""
 
     def test_get_frame(self):
-        """"""
         frame = PythonUtils.get_frame()
         self.assertEqual(self.test_get_frame.__name__, frame.f_code.co_name)
 
@@ -31,8 +30,6 @@ class TestPythonUtils(unittest.TestCase):
         self.assertTrue(frame3 is frame.f_back)
 
     def test_get_caller_name(self):
-        """"""
-
         def foo():
             caller_name = PythonUtils.get_caller_name()
             return caller_name
@@ -42,3 +39,13 @@ class TestPythonUtils(unittest.TestCase):
 
         name = PythonUtils.get_caller_name(0)
         self.assertEqual(self.test_get_caller_name.__name__, name)
+
+    def test_get_lineno(self):
+        lno = PythonUtils.get_lineno()
+        self.assertEqual(44, lno)
+
+        def foo():
+            return PythonUtils.get_lineno(1)
+
+        lno = foo()
+        self.assertEqual(50, lno)

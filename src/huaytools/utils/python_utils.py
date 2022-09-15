@@ -22,7 +22,7 @@ class PythonUtils:
     """"""
 
     @staticmethod
-    def get_frame(level: int = 0):
+    def get_frame(stack_level: int = 0):
         """
         Examples:
             >>> def foo():
@@ -31,15 +31,15 @@ class PythonUtils:
             >>> foo()
             'foo'
         """
-        assert level >= 0
+        assert stack_level >= 0
         frame = inspect.currentframe()  # 获取当前 frame，即 `get_frame` 的 frame
-        for _ in range(level + 1):  # 向上逐级回溯调用者的 frame
+        for _ in range(stack_level + 1):  # 向上逐级回溯调用者的 frame，`+1` 表示跳过 get_frame 本身的调用
             frame = frame.f_back
 
         return frame
 
     @staticmethod
-    def get_caller_name(level: int = 1) -> str:
+    def get_caller_name(stack_level: int = 1) -> str:
         """
         获取调用者的名字；
 
@@ -48,7 +48,7 @@ class PythonUtils:
             如果调用 foo 的对象是一个方法/模块/类，则返回该相应的的方法名/模块名/类名；
 
         Args:
-            level: 回溯层级，默认为 1；
+            stack_level: 回溯层级，默认为 1；
 
         Examples:
             >>> def foo():  # 在 bar 内部获取调用自身的方法名
@@ -72,8 +72,8 @@ class PythonUtils:
             >>> t.a
             1
         """
-        assert level >= 0
-        frame = PythonUtils.get_frame(level + 1)
+        assert stack_level >= 0
+        frame = PythonUtils.get_frame(stack_level + 1)
         co_name = frame.f_code.co_name
 
         # 当调用方是一个模块，此时返回模块的文件名
@@ -81,6 +81,28 @@ class PythonUtils:
             return os.path.basename(frame.f_code.co_filename)
 
         return co_name
+
+    @staticmethod
+    def get_lineno(stack_level: int = 0):
+        """
+        获取调用时行号
+
+        Args:
+            stack_level: 回溯层级
+
+        Examples:
+            # example1: default
+            lno = get_lineno()  # this line
+            print(lno)
+
+            # example2: stack_level > 0
+            def foo():
+                return get_lineno(1)
+
+            lno = foo()  # this line
+            print(lno)
+        """
+        return PythonUtils.get_frame(stack_level + 1).f_lineno
 
 
 class __Test:
