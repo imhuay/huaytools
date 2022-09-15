@@ -43,17 +43,34 @@ class CodeTimer:
     msg_start: str
     msg_end: str
     start: float
-    info: Callable[[str, ...], Any]
+    stream: Callable[[str, ...], Any]
 
-    def __init__(self, name: str = None, info: Callable[[str, ...], Any] = print):
+    def __init__(self, name: str = '', stream: Callable[[str, ...], Any] = print):
+        """
+        Args:
+            name: 
+            stream: 
+        
+        Examples:
+            import time
+
+            @code_timer()
+            def foo():
+                time.sleep(1)
+
+            with code_timer('test'):
+                time.sleep(1)
+
+        TODO: add color
+        """
         self.name = name
         # self.msg_start = msg_start or 'Start {name}{{'
         # self.msg_end = msg_end or '}} End - Spend {cost:.5f}s. \n'
-        self.info = info
+        self.stream = stream
 
     def __call__(self, func):
         """"""
-        if self.name is None:
+        if not self.name:
             self.name = func.__name__
 
         @functools.wraps(func)
@@ -70,14 +87,14 @@ class CodeTimer:
         if name:
             name = f' {name}'
         line = f' @{PythonUtils.get_lineno(2)}L'
-        self.info(f'Start{name}{line}{{')
+        self.stream(f'Start{name}{line}{{')
 
     def info_end(self):
         cost = time.time() - self.start
-        self.info(f'}} End - Spend {cost:.5f}s. \n')
+        self.stream(f'}} End - Spend {cost:.5f}s. \n')
 
     def __enter__(self):
-        self.info_start()
+        self.info_start(self.name)
         self.start = time.time()
 
     def __exit__(self, exc_type, exc_val, exc_tb):
