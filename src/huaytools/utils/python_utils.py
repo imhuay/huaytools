@@ -41,7 +41,7 @@ class PythonUtils:
     @staticmethod
     def get_caller_name(stack_level: int = 1) -> str:
         """
-        获取调用者的名字；
+        获取调用者的名字
 
         使用场景：
             假设 foo 内部调用了 get_caller_name，则 get_caller_name 默认（level=1）会返回调用了 foo 的对象名；
@@ -51,26 +51,22 @@ class PythonUtils:
             stack_level: 回溯层级，默认为 1；
 
         Examples:
-            >>> def foo():  # 在 bar 内部获取调用自身的方法名
-            ...     name = PythonUtils.get_caller_name()  # 返回调用了 bar 的对象名
-            ...     print(f'{name} called foo.')
+            >>> def foo():
+            ...     name = PythonUtils.get_caller_name(0)  # name of who called `get_caller_name`
+            ...     print(name)
+            >>> foo()
+            foo
+            >>> def foo():
+            ...     name = PythonUtils.get_caller_name()  # name of who called `foo`
+            ...     print(name)
+            >>> def bar():
+            ...     foo()
+            >>> bar()
+            bar
             >>> def zoo():
-            ...     return foo()
+            ...     foo()
             >>> zoo()
-            zoo called foo.
-
-            >>> class T:
-            ...     default = {'a': 1, 'b': 2}
-            ...     def _get_attr(self):
-            ...         name = PythonUtils.get_caller_name()
-            ...         return self.default[name]
-            ...     @property
-            ...     def a(self):
-            ...         # return default['a']
-            ...         return self._get_attr()
-            >>> t = T()
-            >>> t.a
-            1
+            zoo
         """
         assert stack_level >= 0
         frame = PythonUtils.get_frame(stack_level + 1)
@@ -83,7 +79,7 @@ class PythonUtils:
         return co_name
 
     @staticmethod
-    def get_lineno(stack_level: int = 0):
+    def get_lineno(stack_level: int = 0) -> int:
         """
         获取调用时行号
 

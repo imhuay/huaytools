@@ -41,11 +41,12 @@ class TestPythonUtils(unittest.TestCase):
         self.assertEqual(self.test_get_caller_name.__name__, name)
 
     def test_get_lineno(self):
+        expected_lno = 45
         lno = PythonUtils.get_lineno()
-        self.assertEqual(44, lno)
+        self.assertEqual(expected_lno, lno)
 
         def foo():
             return PythonUtils.get_lineno(1)
 
         lno = foo()
-        self.assertEqual(50, lno)
+        self.assertEqual(expected_lno + 6, lno)
