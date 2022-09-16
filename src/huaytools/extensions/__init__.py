@@ -13,3 +13,6 @@ from .abc_ex import (
     SingletonMeta,
     SingletonABC
 )
+from .dict_ex import (
+    BunchDict
+)
