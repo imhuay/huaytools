@@ -55,3 +55,16 @@ class TestPythonUtils(unittest.TestCase):
 
         lno = foo()
         self.assertEqual(expected_lno + 6, lno)
+
+    def test_get_annotation_names(self):
+
+        class Demo:
+            a: int
+            b: str
+            c = []
+
+        names = PythonUtils.get_annotation_names(Demo)
+        self.assertEqual(names, ['a', 'b'])
+
+        names = PythonUtils.get_annotation_names(Demo())
+        self.assertEqual(names, ['a', 'b'])

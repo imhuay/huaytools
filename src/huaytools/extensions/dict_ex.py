@@ -13,8 +13,12 @@ from __future__ import annotations
 # import os
 # import sys
 # import unittest
+import json
 
 from typing import Mapping, Union, Any, Iterable
+from dataclasses import dataclass, fields, field
+
+from huaytools.utils.python_utils import PythonUtils
 
 
 class BunchDict(dict):
@@ -151,6 +155,9 @@ class BunchDict(dict):
         """ create from dict """
         return cls.bunching(d)
 
+    def to_dict(self) -> dict:
+        return _unbunch(self)
+
 
 def _bunching(x) -> Union[BunchDict, Any]:
     """
@@ -193,9 +200,115 @@ def _unbunch(x: BunchDict) -> dict:
 
         nb. As dicts are not hashable, they cannot be nested in sets/frozensets.
     """
-    if isinstance(x, dict):
+    if isinstance(x, BunchDict):
         return dict((k, _unbunch(v)) for k, v in x.items())
     elif isinstance(x, (list, tuple)):
         return type(x)(_unbunch(v) for v in x)
     else:
         return x
+
+
+@dataclass
+class DataclassDict(dict):
+    """
+    Dataclass字典，使兼顾 dataclass 和 dict 的功能；
+
+    主要为了代替以下场景：
+        ```python
+        from copy import deepcopy
+        default_info = {
+            'f1': 1,
+            'f2': '2',
+            'f3': set()
+        }
+
+        one_info = deepcopy(default_info)
+        one_info['f1'] = ...
+        one_info['f2'] = ...
+        one_info['f3'] = ...
+
+        infos = [one_info, ...]
+        json.dumps(infos)
+
+        # 代替上述流程
+        @dataclass
+        class DefaultInfo(DataclassDict):
+            f1: int = 1
+            f2: str = '2'
+            f3: set = field(default_factory=set)
+
+        one_info = DefaultInfo()
+        one_info.f1 = ...
+        one_info.f2 = ...
+        one_info.f3 = ...
+
+        infos = [one_info, ...]
+        json.dumps(infos)
+        ```
+
+    Examples:
+        >>> @dataclass
+        ... class Features(DataclassDict):
+        ...     a: int = 1
+        ...     b: str = 'B'
+        ...     c: list = field(default_factory=list)
+        >>> f = Features()
+        >>> print(f)
+        {
+            "a": 1,
+            "b": "B",
+            "c": []
+        }
+        >>> list(f.items())
+        [('a', 1), ('b', 'B'), ('c', [])]
+        >>> f.a = 2
+        >>> f['a'] = 3
+        >>> f.d = 'D'
+        Traceback (most recent call last):
+            ...
+        KeyError: 'd'
+        >>> 'd' not in PythonUtils.get_annotation_names(f)
+        True
+        >>> f['d'] = 'D'  # err
+        Traceback (most recent call last):
+            ...
+        KeyError: 'd'
+        >>> 'd' not in f and 'd' not in PythonUtils.get_annotation_names(f)
+        True
+        >>> f.c.append('Foo')
+        >>> json.dumps(f)  # 可以直接当做 dict 处理
+        '{"a": 3, "b": "B", "c": ["Foo"]}'
+    """
+
+    def __post_init__(self):
+        """"""
+        # 把 field 依次添加到 dict 中
+        for f in fields(self):
+            self[f.name] = getattr(self, f.name)
+
+    def __setattr__(self, key, value):
+        """"""
+        if key in PythonUtils.get_annotation_names(self):
+            super().__setattr__(key, value)
+            super().__setitem__(key, value)
+        else:
+            # raise KeyError(key)
+            # 禁止添加新属性，除非是修改魔术属性
+            try:
+                super().__getattribute__(key)
+            except AttributeError:
+                raise KeyError(key)
+            else:
+                super().__setattr__(key, value)
+
+    def __setitem__(self, key, value):
+        """"""
+        # 禁止添加新元素
+        if key in PythonUtils.get_annotation_names(self):
+            super().__setitem__(key, value)
+            super().__setattr__(key, value)
+        else:
+            raise KeyError(key)
+
+    def __str__(self):
+        return json.dumps(self, indent=4)

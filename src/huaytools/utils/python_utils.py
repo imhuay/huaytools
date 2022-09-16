@@ -15,7 +15,7 @@ import os
 import inspect
 import sys
 
-from typing import Tuple
+from typing import Tuple, List
 
 
 class PythonUtils:
@@ -106,3 +106,7 @@ class PythonUtils:
             print(lno)
         """
         return PythonUtils.get_frame(stack_level + 1).f_lineno
+
+    @staticmethod
+    def get_annotation_names(obj: object) -> List[str]:
+        return list(obj.__annotations__.keys())

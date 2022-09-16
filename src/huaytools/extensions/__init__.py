@@ -14,5 +14,6 @@ from .abc_ex import (
     SingletonABC
 )
 from .dict_ex import (
-    BunchDict
+    BunchDict,
+    DataclassDict
 )
