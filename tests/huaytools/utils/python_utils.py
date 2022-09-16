@@ -19,6 +19,11 @@ from huaytools.utils import PythonUtils
 class TestPythonUtils(unittest.TestCase):
     """"""
 
+    def test_get_version(self):
+        v = PythonUtils.get_version()
+        self.assertEqual(3, len(v))
+        self.assertGreaterEqual(3, v[0])
+
     def test_get_frame(self):
         frame = PythonUtils.get_frame()
         self.assertEqual(self.test_get_frame.__name__, frame.f_code.co_name)
@@ -41,7 +46,7 @@ class TestPythonUtils(unittest.TestCase):
         self.assertEqual(self.test_get_caller_name.__name__, name)
 
     def test_get_lineno(self):
-        expected_lno = 45
+        expected_lno = 50
         lno = PythonUtils.get_lineno()
         self.assertEqual(expected_lno, lno)
 

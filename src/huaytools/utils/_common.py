@@ -43,9 +43,9 @@ class CodeTimer:
     msg_start: str
     msg_end: str
     start: float
-    stream: Callable[[str, ...], Any]
+    stream: Callable
 
-    def __init__(self, name: str = '', stream: Callable[[str, ...], Any] = print):
+    def __init__(self, name: str = '', stream: Callable = print):
         """
         Args:
             name: 

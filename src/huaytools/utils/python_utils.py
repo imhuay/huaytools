@@ -13,13 +13,20 @@ from __future__ import annotations
 import os
 # import sys
 import inspect
+import sys
 
-
-# from typing import *
+from typing import Tuple
 
 
 class PythonUtils:
     """"""
+
+    @staticmethod
+    def get_version() -> Tuple[int]:
+        """
+
+        """
+        return sys.version_info[:3]  # (3, 9, 13)
 
     @staticmethod
     def get_frame(stack_level: int = 0):
@@ -99,29 +106,3 @@ class PythonUtils:
             print(lno)
         """
         return PythonUtils.get_frame(stack_level + 1).f_lineno
-
-
-class __Test:
-
-    def __init__(self):
-        import time
-        from typing import Callable
-
-        for k, v in self.__class__.__dict__.items():
-            if k.startswith('_test') and isinstance(v, Callable):
-                print(f'\x1b[32m=== Start "{k}" {{\x1b[0m')
-                start = time.time()
-                v(self)
-                print(f'\x1b[32m}} End "{k}" - Spend {time.time() - start:3f}s===\x1b[0m\n')
-
-    def _test_doctest(self):  # noqa
-        import doctest
-        doctest.testmod()
-
-    def _test_xxx(self):  # noqa
-        pass
-
-
-if __name__ == '__main__':
-    """"""
-    __Test()
