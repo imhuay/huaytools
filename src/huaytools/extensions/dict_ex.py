@@ -18,7 +18,7 @@ import json
 from typing import Mapping, Union, Any, Iterable
 from dataclasses import dataclass, fields, field
 
-from huaytools.utils.python_utils import PythonUtils
+from huaytools.utils.dataclass_utils import DataclassUtils
 
 
 class BunchDict(dict):
@@ -267,13 +267,13 @@ class DataclassDict(dict):
         Traceback (most recent call last):
             ...
         KeyError: 'd'
-        >>> 'd' not in PythonUtils.get_annotation_names(f)
+        >>> 'd' not in DataclassUtils.get_field_names(f)
         True
         >>> f['d'] = 'D'  # err
         Traceback (most recent call last):
             ...
         KeyError: 'd'
-        >>> 'd' not in f and 'd' not in PythonUtils.get_annotation_names(f)
+        >>> 'd' not in f and 'd' not in DataclassUtils.get_field_names(f)
         True
         >>> f.c.append('Foo')
         >>> json.dumps(f)  # 可以直接当做 dict 处理
@@ -288,7 +288,7 @@ class DataclassDict(dict):
 
     def __setattr__(self, key, value):
         """"""
-        if key in PythonUtils.get_annotation_names(self):
+        if key in DataclassUtils.get_field_names(self):
             super().__setattr__(key, value)
             super().__setitem__(key, value)
         else:
@@ -304,7 +304,7 @@ class DataclassDict(dict):
     def __setitem__(self, key, value):
         """"""
         # 禁止添加新元素
-        if key in PythonUtils.get_annotation_names(self):
+        if key in DataclassUtils.get_field_names(self):
             super().__setitem__(key, value)
             super().__setattr__(key, value)
         else:

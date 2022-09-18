@@ -15,3 +15,4 @@ from ._common import (
     code_timer,
 )
 from .python_utils import PythonUtils
+from .dataclass_utils import DataclassUtils
