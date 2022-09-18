@@ -85,21 +85,21 @@ class TestSingletonMeta(unittest.TestCase):
         class B(metaclass=_SingletonMeta):
             pass
 
-        print()
         n_time = 100000
         tmp = []
         start = time.time()
         for _ in range(n_time):
             tmp.append(A())
         t1 = time.time() - start
-        print(t1)
+        # print()
+        # print(t1)
 
         tmp = []
         start = time.time()
         for _ in range(n_time):
             tmp.append(B())
         t2 = time.time() - start
-        print(t2)
+        # print(t2)
         self.assertLess(t1, t2)
 
 
@@ -113,3 +113,6 @@ class TestSingletonABC(TestSingletonMeta):
 
     def test_thread_safe(self):
         super().test_thread_safe()
+
+    def test_time_cost(self):
+        pass
