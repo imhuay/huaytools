@@ -14,7 +14,7 @@ import time
 import logging
 import functools
 
-from typing import Callable, Any
+from typing import Callable
 
 from .python_utils import PythonUtils
 
@@ -48,9 +48,9 @@ class CodeTimer:
     def __init__(self, name: str = '', stream: Callable = print):
         """
         Args:
-            name: 
-            stream: 
-        
+            name:
+            stream:
+
         Examples:
             import time
 

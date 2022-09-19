@@ -9,5 +9,5 @@ Subject:
     __init__.py
 """
 
-from .utils import *
-from .extensions import *
+from .utils import *  # noqa
+from .extensions import *  # noqa

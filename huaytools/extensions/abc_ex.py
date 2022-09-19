@@ -80,9 +80,9 @@ class SingletonABC(abc.ABC):
         # except AttributeError:
         #     cls._instance = super().__new__(cls)
         #     return cls._instance
-        if not hasattr(cls, f'_instance'):  # # 第一次判断，防止每次判断都执行锁操作
+        if not hasattr(cls, '_instance'):  # # 第一次判断，防止每次判断都执行锁操作
             with cls._lock:
-                if not hasattr(cls, f'_instance'):  # 第二次判断：防止实例被多次创建
+                if not hasattr(cls, '_instance'):  # 第二次判断：防止实例被多次创建
                     # import time
                     # time.sleep(1)  # test thread safety
                     cls._instance = super().__new__(cls)

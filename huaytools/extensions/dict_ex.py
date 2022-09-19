@@ -13,10 +13,9 @@ from __future__ import annotations
 # import os
 # import sys
 # import unittest
-import json
 
 from typing import Mapping, Union, Any, Iterable
-from dataclasses import dataclass, fields, field
+from dataclasses import dataclass, fields
 
 from huaytools.utils.dataclass_utils import DataclassUtils
 
@@ -214,6 +213,7 @@ class DataclassDict(dict):
     Dataclass 字典：将 field 默认保存到一个字典中
 
     Examples:
+        >>> from dataclasses import field
         >>> @dataclass
         ... class Features(DataclassDict):
         ...     a: int = 1
@@ -235,6 +235,7 @@ class DataclassDict(dict):
         >>> DataclassUtils.get_field_names(f)
         ['a', 'b', 'c']
         >>> f.c.append('Foo')
+        >>> import json
         >>> json.dumps(f)  # 可以直接当做 dict 处理
         '{"a": 3, "b": "B", "c": ["Foo"], "d": "D"}'
     """
