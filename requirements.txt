@@ -1,12 +1,2 @@
-## Build
-setuptools
-wheel
-twine
-
-## Lint & Coverage
-mypy
-flake8
-coverage
-
 ## Compatibility
 dataclasses; python_version < '3.7'
