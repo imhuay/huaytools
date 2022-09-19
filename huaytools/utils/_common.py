@@ -101,4 +101,4 @@ class CodeTimer:
         self.info_end()
 
 
-code_timer = CodeTimer
+code_timer = CodeTimer()

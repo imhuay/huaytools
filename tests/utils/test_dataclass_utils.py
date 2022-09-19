@@ -16,12 +16,12 @@ import unittest
 
 # from typing import *
 
-from huaytools.utils import DataclassUtils
+from huaytools import DataclassUtils
 
 
 class TestDataclassUtils(unittest.TestCase):
 
-    def test_(self):
+    def test_get_field_names(self):
         from dataclasses import dataclass
 
         @dataclass

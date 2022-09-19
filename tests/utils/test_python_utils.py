@@ -13,7 +13,7 @@ from __future__ import annotations
 import inspect
 import unittest
 
-from huaytools.utils import PythonUtils
+from huaytools import PythonUtils
 
 
 class TestPythonUtils(unittest.TestCase):

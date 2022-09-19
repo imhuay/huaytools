@@ -77,14 +77,14 @@ class TestDataclassDict(unittest.TestCase):
 
     @dataclass
     class Features(DataclassDict):
-        a: int = 1
+        a: int
         b: str = 'B'
         c: list = field(default_factory=list)
 
     def test_base(self):
-        f = self.Features()
+        f = self.Features(a=1)
         self.assertTrue(f.a == f['a'] == 1)
-        self.assertEqual(str(f), '{\n    "a": 1,\n    "b": "B",\n    "c": []\n}')
+        self.assertEqual(json.dumps(f), '{"a": 1, "b": "B", "c": []}')
         self.assertEqual(f, {'a': 1, 'b': 'B', 'c': []})
         self.assertEqual(vars(f), {'a': 1, 'b': 'B', 'c': []})
 
@@ -99,12 +99,11 @@ class TestDataclassDict(unittest.TestCase):
         self.assertEqual(f.b, bar)
         self.assertEqual(f['b'], bar)
 
-        with self.assertRaises(KeyError):
-            f.d = ...
+        f['d'] = 42
+        with self.assertRaises(AttributeError):
+            getattr(f, 'd')
 
-        with self.assertRaises(KeyError):
-            f['d'] = ...
-
+        f.pop('d')
         f.c.append('Foo')
         self.assertEqual(json.dumps(f), '{"a": 10, "b": "Bar", "c": ["Foo"]}')
 

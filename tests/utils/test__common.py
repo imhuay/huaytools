@@ -12,13 +12,12 @@ from __future__ import annotations
 
 from unittest import TestCase
 
-from huaytools.utils import CommonUtils, code_timer
+from huaytools import CodeTimer, get_logger
 
 
 class TestCommonUtils(TestCase):  # noqa
 
     def test_get_logger(self):
-        get_logger = CommonUtils.get_logger
 
         logger = get_logger()
         self.assertEqual(self.test_get_logger.__name__, logger.name)
@@ -30,16 +29,14 @@ class TestCommonUtils(TestCase):  # noqa
 class TestCodeTimer(TestCase):
 
     def test_base(self):
-        import time
+        logger = get_logger()
 
         def func():
-            print(func.__name__)
-            time.sleep(1)
+            pass
 
-        print()
-        code_timer()(func)()
+        CodeTimer(stream=logger.info)(func)()
 
-        with code_timer():
+        with CodeTimer(stream=logger.info):
             func()
 
         self.assertTrue(True)

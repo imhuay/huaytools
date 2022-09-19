@@ -211,40 +211,7 @@ def _unbunch(x: BunchDict) -> dict:
 @dataclass
 class DataclassDict(dict):
     """
-    Dataclass字典，使兼顾 dataclass 和 dict 的功能；
-
-    主要为了代替以下场景：
-        ```python
-        from copy import deepcopy
-        default_info = {
-            'f1': 1,
-            'f2': '2',
-            'f3': set()
-        }
-
-        one_info = deepcopy(default_info)
-        one_info['f1'] = ...
-        one_info['f2'] = ...
-        one_info['f3'] = ...
-
-        infos = [one_info, ...]
-        json.dumps(infos)
-
-        # 代替上述流程
-        @dataclass
-        class DefaultInfo(DataclassDict):
-            f1: int = 1
-            f2: str = '2'
-            f3: set = field(default_factory=set)
-
-        one_info = DefaultInfo()
-        one_info.f1 = ...
-        one_info.f2 = ...
-        one_info.f3 = ...
-
-        infos = [one_info, ...]
-        json.dumps(infos)
-        ```
+    Dataclass 字典：将 field 默认保存到一个字典中
 
     Examples:
         >>> @dataclass
@@ -252,32 +219,24 @@ class DataclassDict(dict):
         ...     a: int = 1
         ...     b: str = 'B'
         ...     c: list = field(default_factory=list)
-        >>> f = Features()
-        >>> print(f)
-        {
-            "a": 1,
-            "b": "B",
-            "c": []
-        }
-        >>> list(f.items())
-        [('a', 1), ('b', 'B'), ('c', [])]
-        >>> f.a = 2
-        >>> f['a'] = 3
-        >>> f.d = 'D'
+        >>> f = Features(); f
+        Features(a=1, b='B', c=[])
+        >>> f.a = 2; f['a']
+        2
+        >>> f['a'] = 3; f.a
+        3
+        >>> f['d'] = 'D'
+        >>> f.d  # noqa
         Traceback (most recent call last):
             ...
-        KeyError: 'd'
-        >>> 'd' not in DataclassUtils.get_field_names(f)
+        AttributeError: 'Features' object has no attribute 'd'
+        >>> not hasattr(f, 'd') and 'd' in f
         True
-        >>> f['d'] = 'D'  # err
-        Traceback (most recent call last):
-            ...
-        KeyError: 'd'
-        >>> 'd' not in f and 'd' not in DataclassUtils.get_field_names(f)
-        True
+        >>> DataclassUtils.get_field_names(f)
+        ['a', 'b', 'c']
         >>> f.c.append('Foo')
         >>> json.dumps(f)  # 可以直接当做 dict 处理
-        '{"a": 3, "b": "B", "c": ["Foo"]}'
+        '{"a": 3, "b": "B", "c": ["Foo"], "d": "D"}'
     """
 
     def __post_init__(self):
@@ -288,27 +247,34 @@ class DataclassDict(dict):
 
     def __setattr__(self, key, value):
         """"""
+        super().__setattr__(key, value)
         if key in DataclassUtils.get_field_names(self):
-            super().__setattr__(key, value)
             super().__setitem__(key, value)
-        else:
-            # raise KeyError(key)
-            # 禁止添加新属性，除非是修改魔术属性
-            try:
-                super().__getattribute__(key)
-            except AttributeError:
-                raise KeyError(key)
-            else:
-                super().__setattr__(key, value)
+
+        # if key in DataclassUtils.get_field_names(self):
+        #     super().__setattr__(key, value)
+        #     super().__setitem__(key, value)
+        # else:
+        #     # raise KeyError(key)
+        #     # 禁止添加新属性，除非是修改魔术属性
+        #     try:
+        #         super().__getattribute__(key)
+        #     except AttributeError:
+        #         raise KeyError(key)
+        #     else:
+        #         super().__setattr__(key, value)
 
     def __setitem__(self, key, value):
         """"""
-        # 禁止添加新元素
+        super().__setitem__(key, value)
         if key in DataclassUtils.get_field_names(self):
-            super().__setitem__(key, value)
             super().__setattr__(key, value)
-        else:
-            raise KeyError(key)
 
-    def __str__(self):
-        return json.dumps(self, indent=4)
+        # if key in DataclassUtils.get_field_names(self):
+        #     super().__setitem__(key, value)
+        #     super().__setattr__(key, value)
+        # else:
+        #     raise KeyError(key)
+
+    # def __str__(self):
+    #     return dict.__str__(self)
