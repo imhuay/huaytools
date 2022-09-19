@@ -3,9 +3,11 @@ setuptools
 wheel
 twine
 
-## Lint & Coverage
+## Lint
 mypy
 flake8
+
+## Coverage
 coverage
 
 ## Test
