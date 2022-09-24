@@ -11,6 +11,7 @@ _book/
 *.iml
 *.DS_Store
 *.pyc
+-*
 
 # 指定文件
 nohup.out
