@@ -7,8 +7,6 @@ twine
 mypy
 flake8
 
-## Coverage
-coverage
-
-## Test
+## Test & Coverage
 pytest
+pytest-cov
