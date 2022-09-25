@@ -6,8 +6,11 @@ name: Build
 on:
   push:
     branches: [ '**' ]
+  pull_request:
+    branches: [ 'master' ]
+  workflow_call:
   schedule:
-    - cron: '0 10 * * *'
+    - cron: '0 0 * * *'  # 北京时间上午 08:00
 
 jobs:
   build:
@@ -22,9 +25,9 @@ jobs:
 
     steps:
     - name: Checkout
-      uses: actions/checkout@master
-    - name: Set up Python ${{ matrix.python-version }}
-      uses: actions/setup-python@master
+      uses: actions/checkout@v3
+    - name: Setup Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v4
       with:
         python-version: ${{ matrix.python-version }}
     - name: Install dependencies
@@ -32,8 +35,15 @@ jobs:
         python -m pip install --upgrade pip
         python -m pip install flake8 pytest pytest-cov
         pip install -r requirements.txt
+    - name: Setup sdist
+      run: python setup.py sdist  # need dist for release
+      #run: python setup.py install
     - name: Setup package
-      run: python setup.py install
+      if: matrix.os != 'windows-latest'
+      run: pip install dist/*.tar.gz  # not support windows
+    - name: Setup package on Windows
+      if: matrix.os == 'windows-latest'
+      run: pip install (Get-ChildItem dist/*.tar.gz)
     - name: Lint by flake8
       run: |
         # stop the build if there are Python syntax errors or undefined names
@@ -41,7 +51,7 @@ jobs:
         # exit-zero treats all errors as warnings. The GitHub editor is 127 chars wide
         flake8 ./src ./tests --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
     - name: Pytest & Generate coverage report
-      run: pytest --cov=./src --cov-report=xml:./coverage.xml
+      run: pytest --cov=. --cov-report=xml:./coverage.xml
     - name: Upload coverage to Codecov
       uses: codecov/codecov-action@v3
       with:
