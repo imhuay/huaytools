@@ -5,7 +5,8 @@ name: Build
 
 on:
   push:
-    branches: [ '**' ]
+    branches-ignore:
+      - 'release/**'  # run on release.yml
   pull_request:
     branches: [ 'master' ]
   workflow_call:

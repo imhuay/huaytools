@@ -2,7 +2,7 @@ huaytools
 ===
 
 [![Build](https://github.com/imhuay/huaytools/actions/workflows/build.yml/badge.svg?branch=master)](https://github.com/imhuay/huaytools/actions?query=workflow:build)
-[![coverage](https://img.shields.io/codecov/c/github/imhuay/huaytools/master?flag=pytest)](https://codecov.io/gh/imhuay/huaytools)
+[![coverage](https://img.shields.io/codecov/c/github/imhuay/huaytools/master)](https://codecov.io/gh/imhuay/huaytools)
 [![license](https://img.shields.io/github/license/imhuay/huaytools)](https://github.com/imhuay/huaytools/blob/master/LICENSE)
 [![pypi](https://img.shields.io/pypi/v/huaytools)](https://pypi.org/project/huaytools/)
 [![python](https://img.shields.io/pypi/pyversions/huaytools)](https://pypi.org/project/huaytools)
