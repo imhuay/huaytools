@@ -13,7 +13,11 @@ from __future__ import annotations
 import inspect
 import unittest
 
+from pathlib import Path
+
 from huaytools import PythonUtils
+
+module_name = PythonUtils.get_caller_name(0)
 
 
 class TestPythonUtils(unittest.TestCase):
@@ -40,24 +44,22 @@ class TestPythonUtils(unittest.TestCase):
             return caller_name
 
         name = foo()
-        self.assertEqual(self.test_get_caller_name.__name__, name)
+        assert name == self.test_get_caller_name.__name__
 
         name = PythonUtils.get_caller_name(0)
-        self.assertEqual(self.test_get_caller_name.__name__, name)
+        assert name == self.test_get_caller_name.__name__
+
+        assert module_name == Path(__file__).name
 
     def test_get_lineno(self):
-        expected_lno = 50
-        lno = PythonUtils.get_lineno()
-        self.assertEqual(expected_lno, lno)
+        assert PythonUtils.get_lineno() == inspect.currentframe().f_lineno
 
         def foo():
             return PythonUtils.get_lineno(1)
 
-        lno = foo()
-        self.assertEqual(expected_lno + 6, lno)
+        assert foo() == inspect.currentframe().f_lineno
 
     def test_get_annotation_names(self):
-
         class Demo:
             a: int
             b: str

@@ -14,6 +14,7 @@ import json
 # import os
 # import sys
 import unittest
+import pytest
 
 # from typing import *
 from dataclasses import dataclass, fields, field
@@ -36,12 +37,12 @@ class TestBunchDict(unittest.TestCase):
         self.assertTrue(hasattr(x, 'd'))
         self.assertTrue(hasattr(x.d, 'foo'))
 
-        x.c = {'bar': 8}
-        self.assertIs(type(x.c), BunchDict)
+        x.c = [{'bar': 8}]
+        self.assertIs(type(x.c[0]), BunchDict)
 
         self.assertEqual(dir(x), ['a', 'b', 'c', 'd'])
-        self.assertEqual(vars(x), {'a': 1, 'b': 2, 'c': {'bar': 8}, 'd': {'foo': 6}})
-        self.assertEqual(str(x), "{'a': 1, 'b': 2, 'c': {'bar': 8}, 'd': {'foo': 6}}")
+        self.assertEqual(vars(x), {'a': 1, 'b': 2, 'c': [{'bar': 8}], 'd': {'foo': 6}})
+        self.assertEqual(str(x), "{'a': 1, 'b': 2, 'c': [{'bar': 8}], 'd': {'foo': 6}}")
 
         with self.assertRaises(AttributeError):
             del x.a
@@ -52,6 +53,13 @@ class TestBunchDict(unittest.TestCase):
 
         x.__doc__ = {'a': 1}
         self.assertIs(type(x.__doc__), BunchDict)
+
+    def test_del_attr(self):
+        x = BunchDict(a=1, b=2)
+        with pytest.raises(AttributeError):
+            del x.c
+        with pytest.raises(AttributeError):
+            del x.__doc__
 
     def test_from_dict(self):
         y = {'foo': {'a': 1, 'bar': {'c': 'C'}}, 'b': 2}
@@ -67,14 +75,13 @@ class TestBunchDict(unittest.TestCase):
             self.assertIs(type(it), BunchDict)
 
     def test_to_dict(self):
-        y = {'foo': {'a': 1, 'bar': {'c': 'C'}}, 'b': 2}
+        y = {'foo': {'a': 1, 'bar': [{'c': 'C'}]}, 'b': 2}
         x = BunchDict(y).to_dict()
         self.assertEqual(x, y)
         self.assertIs(type(x), dict)
 
 
 class TestDataclassDict(unittest.TestCase):
-
     @dataclass
     class Features(DataclassDict):
         a: int
