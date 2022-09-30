@@ -5,10 +5,11 @@ name: Build
 
 on:
   push:
-    branches-ignore:
-      - 'release/**'  # run on release.yml
-  pull_request:
-    branches: [ 'master' ]
+    branches: [ '**' ]
+    #branches-ignore:
+    #  - 'release/**'
+  #pull_request:
+  #  branches: [ 'master' ]
   workflow_call:
   schedule:
     - cron: '0 0 * * *'  # 北京时间上午 08:00

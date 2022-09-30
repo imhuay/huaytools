@@ -3,15 +3,24 @@
 name: Release
 
 on:
-  push:
-    branches: [ 'release/**' ]
+  #push:
+  #  branches: [ 'release/**' ]
+  workflow_run:
+    workflows: [ "Build" ]
+    types: [ completed ]
+    branches:
+      - "releases/**"
+      - '!releases/**-alpha'
+    #tags:  # workflow_run invalid
+    #  - "v**"
   release:
     types: [ created ]
 
 jobs:
-  build:
-    #if: github.event_name != 'release'  # run when pushed, so don't need
-    uses: ./.github/workflows/build.yml
+  # use `workflow_run`
+#  build:
+#    #if: github.event_name != 'release'  # run when pushed, so don't need
+#    uses: ./.github/workflows/build.yml
 
   publish:
     needs: build
