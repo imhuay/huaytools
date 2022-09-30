@@ -1,4 +1,4 @@
 ## Compatibility
 requests
-dataclasses; python_version < '3.7'
 markdown
+dataclasses; python_version < '3.7'
