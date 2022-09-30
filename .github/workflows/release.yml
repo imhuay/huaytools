@@ -4,9 +4,19 @@ name: Release
 
 on:
   push:
-    branches: [ 'release/**' ]
+    branches:
+      - 'releases/**'
+      - '!releases/**-alpha'
+    tags: [ 'v**' ]
   release:
     types: [ created ]
+  #workflow_run:
+  #  workflows: [ "Build" ]
+  #  types: [ completed ]
+  #  branches:
+  #    - "releases/**"
+  #    - '!releases/**-alpha'
+
 
 jobs:
   build:
