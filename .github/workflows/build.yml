@@ -5,7 +5,6 @@ name: Build
 
 on:
   push:
-    #branches: [ '**' ]
     branches:
       - '**'
       - 'releases/**-alpha'
