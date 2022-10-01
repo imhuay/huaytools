@@ -19,11 +19,13 @@ from __future__ import annotations
 # from pathlib import Path
 # from collections import defaultdict
 
-from markdown.extensions.toc import slugify_unicode  # noqa
+# import markdown
+# from markdown.extensions.toc import slugify_unicode
+from markdown.extensions import toc
 
 
 class MarkdownUtils:
 
     @staticmethod
     def slugify(head):
-        return slugify_unicode(head, '-')
+        return toc.slugify_unicode(head, '-')  # noqa

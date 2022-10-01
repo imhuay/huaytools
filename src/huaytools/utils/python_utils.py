@@ -15,18 +15,16 @@ import os
 import inspect
 import sys
 
-from typing import Tuple, List
-
 
 class PythonUtils:
     """"""
 
     @staticmethod
-    def get_version() -> Tuple[int]:
+    def get_version() -> tuple:
         """
 
         """
-        return sys.version_info[:3]  # (3, 9, 13)
+        return tuple(sys.version_info[:3])  # (3, 9, 13)
 
     @staticmethod
     def get_frame(stack_level: int = 0):
@@ -40,8 +38,16 @@ class PythonUtils:
         """
         assert stack_level >= 0
         frame = inspect.currentframe()  # 获取当前 frame，即 `get_frame` 的 frame
-        for _ in range(stack_level + 1):  # 向上逐级回溯调用者的 frame，`+1` 表示跳过 get_frame 本身的调用
-            frame = frame.f_back
+        # for _ in range(stack_level + 1):  # 向上逐级回溯调用者的 frame，`+1` 表示跳过 get_frame 本身的调用
+        #     frame = frame.f_back
+        n_back = stack_level + 1
+        while n_back > 0:
+            if frame is not None:
+                frame = frame.f_back
+            else:
+                raise ValueError(f'stack_level={stack_level} more than maximum.')
+
+            n_back -= 1
 
         return frame
 
@@ -108,5 +114,5 @@ class PythonUtils:
         return PythonUtils.get_frame(stack_level + 1).f_lineno
 
     @staticmethod
-    def get_annotation_names(obj: object) -> List[str]:
+    def get_annotation_names(obj: object) -> list[str]:
         return list(obj.__annotations__.keys())

@@ -28,8 +28,8 @@ class SingletonMeta(type):
         >>> A() is A()
         True
     """
-    _instances = dict()
-    _lock = Lock()
+    _instances: dict = dict()
+    _lock: Lock = Lock()
 
     def __call__(cls, *args, **kwargs):
         if cls not in cls._instances:  # 第一次判断，防止每次判断都执行锁操作

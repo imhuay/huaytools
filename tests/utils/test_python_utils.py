@@ -38,6 +38,9 @@ class TestPythonUtils(unittest.TestCase):
         frame3 = PythonUtils.get_frame(1)
         self.assertTrue(frame3 is frame.f_back)
 
+        with self.assertRaises(ValueError):
+            PythonUtils.get_frame(100)
+
     def test_get_caller_name(self):
         def foo():
             caller_name = PythonUtils.get_caller_name()

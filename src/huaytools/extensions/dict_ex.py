@@ -84,8 +84,11 @@ class BunchDict(dict):
     """
 
     # __slots__ = ()
-    __dict__ = property(lambda self: self)
-    """ 禁止修改 __dict__ """
+    # __dict__ = property(lambda self: self)  # 过不了 mypy
+    @property
+    def __dict__(self):
+        """ 禁止修改 __dict__ """
+        return self
 
     def __dir__(self):
         """ 屏蔽其他属性或方法 """

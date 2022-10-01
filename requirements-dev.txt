@@ -1,11 +1,11 @@
 ## Build
-setuptools
-wheel
-twine
+# setuptools
+# wheel
+# twine
 
 ## Lint
-mypy
 flake8
+mypy
 
 ## Test & Coverage
 pytest
