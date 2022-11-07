@@ -17,13 +17,3 @@ from .dict_extensions import (
     BunchDict,
     DataclassDict
 )
-
-__all__ = [
-    # _common
-    'SingletonMeta',
-    'SingletonABC',
-
-    # dict_ex
-    'BunchDict',
-    'DataclassDict'
-]
