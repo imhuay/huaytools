@@ -4,3 +4,4 @@ requests
 markdown
 PyYAML
 typing-extensions
+absl-py
