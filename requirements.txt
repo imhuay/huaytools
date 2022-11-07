@@ -3,3 +3,4 @@ dataclasses; python_version < '3.7'
 requests
 markdown
 PyYAML
+typing-extensions

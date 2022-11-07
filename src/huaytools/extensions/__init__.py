@@ -9,19 +9,20 @@ Subject:
     __init__.py
 """
 
-from .abc_ex import (
+from ._common import (
     SingletonMeta,
     SingletonABC
 )
-from .dict_ex import (
+from .dict_extensions import (
     BunchDict,
     DataclassDict
 )
 
 __all__ = [
-    # abc_ex
+    # _common
     'SingletonMeta',
     'SingletonABC',
+
     # dict_ex
     'BunchDict',
     'DataclassDict'
