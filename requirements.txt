@@ -1,7 +1,6 @@
-## Compatibility
+absl-py
 dataclasses; python_version < '3.7'
-requests
 markdown
 PyYAML
+requests
 typing-extensions
-absl-py

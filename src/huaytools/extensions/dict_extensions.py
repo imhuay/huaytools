@@ -94,7 +94,7 @@ class BunchDict(dict):
         """ 屏蔽其他属性或方法 """
         return self.keys()
 
-    def __init__(self, seq: Union[Mapping, Iterable] = None, **kwargs):
+    def __init__(self, seq: Mapping | Iterable = None, **kwargs):
         """"""
         super().__init__()  # 初始化 self，一个空 dict
 

@@ -66,7 +66,7 @@ jobs:
       run: pytest --cov=huaytools --cov-report=xml:./coverage.xml
 
     - name: Run Mypy
-      run: mypy --install-types --non-interactive src/
+      run: mypy src --install-types --non-interactive
 
     - name: Upload coverage to Codecov
       uses: codecov/codecov-action@v3
